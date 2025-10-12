@@ -1,23 +1,22 @@
-# ใช้ Node.js LTS เป็น base image
+# Node base image
 FROM node:20-alpine
 
-# ตั้ง working directory
 WORKDIR /app
 
-# คัดลอก package.json และ lock file
-COPY package.json package-lock.json ./
-
 # ติดตั้ง dependencies
-RUN npm ci --production
+COPY package.json package-lock.json ./
+RUN npm ci
 
-# คัดลอก source code ทั้งหมด
+# คัดลอก source code
 COPY . .
 
-# สร้าง Prisma client
+# สร้าง Prisma Client
 RUN npx prisma generate
 
-# เปิด port แอป
+# Build TypeScript เป็น JavaScript
+RUN npm run build
+
 EXPOSE 3000
 
-# คำสั่ง run แอป
-CMD ["node", "dist/index.js"]
+# Run app
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/index.js"]
