@@ -1,4 +1,4 @@
-# Node base image
+# Base image
 FROM node:20-alpine
 
 WORKDIR /app
@@ -7,7 +7,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 
-# คัดลอก source code
+# คัดลอก source code ทั้งหมด
 COPY . .
 
 # สร้าง Prisma Client
@@ -18,5 +18,5 @@ RUN npm run build
 
 EXPOSE 3000
 
-# Run app
+# Run app พร้อม deploy Prisma migration
 CMD ["sh", "-c", "npx prisma migrate deploy && node dist/index.js"]
