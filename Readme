@@ -1,0 +1,34 @@
+# Mini CRM Loyalty Project
+
+ระบบ Mini CRM สำหรับจัดการลูกค้าและคะแนนสะสม (Loyalty Points)  
+ใช้เทคโนโลยี: Node.js, TypeScript, Prisma, PostgreSQL, Docker
+
+---
+
+## 🔧 Technologies
+
+- Node.js + TypeScript
+- Prisma ORM
+- PostgreSQL
+- Docker / Docker Compose
+- ULID สำหรับ ID (optional)
+
+---
+
+## ⚡ Features
+
+- สร้าง/จัดการลูกค้า (Customer)
+- บันทึกและจัดการคะแนนสะสม (Loyalty Points)
+- รองรับการใช้งานผ่าน REST API
+- ใช้ Prisma Migrations สำหรับสร้างตารางและ schema
+- รันง่ายผ่าน Docker
+
+---
+
+## ⚙️ Setup
+
+### 1. Clone repository
+
+```bash
+git clone <repo-url>
+cd <repo-folder>
