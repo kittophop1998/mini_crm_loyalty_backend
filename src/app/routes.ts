@@ -14,6 +14,7 @@ export const createRouter = () => {
     const customerCtrl = mainContainer.customer.controller();
     r.post('/customers', (req, res) => customerCtrl.create(req, res));
     r.get('/customers/:id', (req, res) => customerCtrl.get(req, res));
+    r.get('/customers', (req, res) => customerCtrl.getAll(req, res));
 
     return r;
 };

@@ -3,4 +3,5 @@ import { Customer } from "../entities/Customer";
 
 export interface ICustomerRepository extends IRepository<Customer> {
     findByPhone(phone: string): Promise<Customer | null>;
+    findAll(): Promise<Customer[] | null>;
 }

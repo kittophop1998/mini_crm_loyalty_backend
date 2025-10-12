@@ -4,6 +4,7 @@ import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 import { createRouter } from './routes';
 import { prisma } from '../config/prisma';
+import { redis } from '../config/redis';
 
 dotenv.config();
 
@@ -15,7 +16,7 @@ app.use(express.json());
 // -----------------------
 app.use(cors({
     origin: process.env.CORS_ORIGIN ?? '*', // ตัวอย่าง: 'http://localhost:3001'
-    methods: ['GET','POST','PUT','DELETE','OPTIONS'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true,
 }));
 
@@ -45,6 +46,10 @@ async function startServer() {
     try {
         await prisma.$connect();
         console.log('✅ Prisma DB connected');
+
+        // 2️⃣ Connect Redis
+        await redis.ping(); // เรียก ping เพื่อเช็ค connection
+        console.log('✅ Redis connected');
 
         app.listen(port, () => {
             console.log(`🚀 Server running at http://localhost:${port}`);
