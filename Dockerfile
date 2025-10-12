@@ -19,4 +19,4 @@ RUN npm run build
 EXPOSE 3000
 
 # Run app พร้อม deploy Prisma migration
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/index.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/app/index.js"]
