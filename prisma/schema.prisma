@@ -1,0 +1,32 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  phone     String   @unique
+  createdAt DateTime @default(now())
+}
+
+model Customer {
+  id        String         @id @default(uuid())
+  name      String
+  phone     String         @unique
+  points    LoyaltyPoint[] @relation("CustomerPoints") // Relation ชัดเจน
+  createdAt DateTime       @default(now())
+}
+
+model LoyaltyPoint {
+  id         String   @id @default(uuid())
+  customerId String
+  points     Int
+  createdAt  DateTime @default(now())
+  customer   Customer @relation("CustomerPoints", fields: [customerId], references: [id])
+}
