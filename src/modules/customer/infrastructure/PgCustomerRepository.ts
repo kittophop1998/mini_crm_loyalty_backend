@@ -95,4 +95,30 @@ export class PgCustomerRepository implements ICustomerRepository {
 
         return customers;
     }
+
+    async findByPhone(phone: string): Promise<Customer | null> {
+        const result = await prisma.customer.findUnique({
+            where: { phone },
+            include: { points: true } // Use include only
+        });
+
+        if (!result) return null;
+
+        const totalPoints = result.points.reduce((sum, p) => sum + p.points, 0);
+        const pointsHistory: any = result.points.map(p => ({
+            id: p.id,
+            points: p.points,
+            type: 'earn', // หรือเพิ่ม type ถ้า schema มี
+            referenceId: undefined,
+            createdAt: p.createdAt
+        }));
+
+        return new Customer(
+            result.id,
+            result.name,
+            result.phone,
+            totalPoints,
+            pointsHistory
+        );
+    }
 }
