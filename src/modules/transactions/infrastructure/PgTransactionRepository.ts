@@ -11,7 +11,7 @@ export class PgTransactionRepository implements ITransactionRepository {
     // ใช้ Prisma Transaction ให้ Atomic
     await prisma.$transaction(async (tx) => {
       await tx.transaction.create({
-        data: { customerId, amount, pointsEarned: earnedPoints },
+        data: { customerId, amount, earnedPoints },
       });
 
       await tx.loyaltyPoint.create({
@@ -39,7 +39,7 @@ export class PgTransactionRepository implements ITransactionRepository {
         t.id,
         t.customerId,
         t.amount,
-        t.pointsEarned,
+        t.earnedPoints,
         t.createdAt,
     ));
   }
