@@ -1,3 +1,4 @@
+import { LoyaltyPoint } from "@prisma/client";
 import { BaseEntity } from "../../../shared/entities/BaseEntity";
 
 export class Customer extends BaseEntity {
@@ -5,7 +6,9 @@ export class Customer extends BaseEntity {
         id: string,
         public name: string,
         public phone: string,
-        createdAt?: Date
+        public totalPoints: number = 0,
+        public points: LoyaltyPoint[] = [],
+        createdAt?: Date,
     ) {
         super(id, createdAt);
     }

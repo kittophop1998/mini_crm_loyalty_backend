@@ -10,11 +10,12 @@ export class PgUserRepository implements IUserRepository {
                 id: user.id,
                 name: user.name,
                 phone: user.phone,
+                username: user.username,
                 createdAt: user.createdAt,
             },
         });
 
-        return new User(result.id, result.name, result.phone, result.createdAt);
+        return new User(result.id, result.name, result.phone, result.username, result.createdAt);
     }
 
 
@@ -25,7 +26,7 @@ export class PgUserRepository implements IUserRepository {
 
         if (!result) return null;
 
-        return new User(result.id, result.name, result.phone, result.createdAt);
+        return new User(result.id, result.name, result.phone, result.username, result.createdAt);
     }
 
 
@@ -36,6 +37,16 @@ export class PgUserRepository implements IUserRepository {
 
         if (!result) return null;
 
-        return new User(result.id, result.name, result.phone, result.createdAt);
+        return new User(result.id, result.name, result.phone, result.username , result.createdAt);
+    }
+
+    async findByUsername(username: string): Promise<User | null> {
+        const result = await prisma.user.findUnique({
+            where: { username },
+        });
+
+        if (!result) return null;
+
+        return new User(result.id, result.name, result.phone, result.username, result.createdAt);
     }
 }

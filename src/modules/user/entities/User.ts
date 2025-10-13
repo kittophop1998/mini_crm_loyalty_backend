@@ -6,11 +6,11 @@ export class User extends BaseEntity {
         id: string,
         public name: string,
         public phone: string,
-        createdAt?: Date
+        public username: string,
+        createdAt?: Date,
     ) {
         super(id, createdAt);
     }
-
 
     validate() {
         if (!this.name || this.name.trim().length === 0) throw new Error('name is required');

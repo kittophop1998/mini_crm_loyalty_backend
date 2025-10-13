@@ -12,15 +12,21 @@ model User {
   id        String   @id @default(uuid())
   name      String
   phone     String   @unique
+  username  String   @unique
   createdAt DateTime @default(now())
 }
 
 model Customer {
-  id        String         @id @default(uuid())
-  name      String
-  phone     String         @unique
-  points    LoyaltyPoint[] @relation("CustomerPoints") // Relation ชัดเจน
-  createdAt DateTime       @default(now())
+  id          String         @id @default(uuid())
+  name        String
+  phone       String         @unique
+  lineId      String?
+  tier        String         @default("Silver")
+  totalPoints Int            @default(0) // ✅ เพิ่มอันนี้
+  points      LoyaltyPoint[] @relation("CustomerPoints")
+  transaction Transaction[]
+  redemption  Redemption[]
+  createdAt   DateTime       @default(now())
 }
 
 model LoyaltyPoint {
@@ -29,4 +35,31 @@ model LoyaltyPoint {
   points     Int
   createdAt  DateTime @default(now())
   customer   Customer @relation("CustomerPoints", fields: [customerId], references: [id])
+}
+
+model Transaction {
+  id           String   @id @default(uuid())
+  customerId   String
+  amount       Float
+  earnedPoints Int
+  createdAt    DateTime @default(now())
+  customer     Customer @relation(fields: [customerId], references: [id])
+}
+
+model Reward {
+  id          String       @id @default(uuid())
+  name        String
+  description String?
+  pointCost   Int
+  createdAt   DateTime     @default(now())
+  redemptions Redemption[]
+}
+
+model Redemption {
+  id         String   @id @default(uuid())
+  customerId String
+  rewardId   String
+  createdAt  DateTime @default(now())
+  customer   Customer @relation(fields: [customerId], references: [id])
+  reward     Reward   @relation(fields: [rewardId], references: [id])
 }

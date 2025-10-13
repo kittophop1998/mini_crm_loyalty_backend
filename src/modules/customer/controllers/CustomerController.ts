@@ -22,7 +22,7 @@ export class CustomerController {
         }
     }
 
-    async get(req: Request, res: Response) {
+    async findById(req: Request, res: Response) {
         try {
             const result = await this.getUC.execute(req.params.id);
 
