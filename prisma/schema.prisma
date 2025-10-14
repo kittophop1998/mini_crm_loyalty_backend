@@ -22,7 +22,7 @@ model Customer {
   phone       String         @unique
   lineId      String?
   tier        String         @default("Silver")
-  totalPoints Int            @default(0) // ✅ เพิ่มอันนี้
+  totalPoints Int            @default(0)
   points      LoyaltyPoint[] @relation("CustomerPoints")
   transaction Transaction[]
   redemption  Redemption[]

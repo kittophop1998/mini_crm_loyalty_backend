@@ -1,4 +1,4 @@
-export class Redeem {
+export class RedeemUseCase {
     constructor(
         private redemptionRepository: any
     ) {}
