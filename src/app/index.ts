@@ -1,61 +1,62 @@
 import express from 'express';
-import dotenv from 'dotenv';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 import { createRouter } from './routes';
 import { prisma } from '../config/prisma';
 import { redis } from '../config/redis';
-
-dotenv.config();
+import { config } from '../config/app';
+import { errorHandler } from '../middleware/errorHandler';
 
 const app = express();
+
+// -----------------------
+// Middleware Setup
+// -----------------------
 app.use(express.json());
 
-// -----------------------
-// CORS
-// -----------------------
+// CORS Configuration
 app.use(cors({
-    origin: process.env.CORS_ORIGIN ?? '*', // ตัวอย่าง: 'http://localhost:3001'
+    origin: config.cors.origin,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    credentials: true,
+    credentials: config.cors.credentials,
 }));
 
-// -----------------------
 // Rate Limiting
-// -----------------------
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 นาที
-    max: 100, // 100 requests ต่อ IP ต่อ window
+    windowMs: config.rateLimit.windowMs,
+    max: config.rateLimit.max,
     standardHeaders: true,
     legacyHeaders: false,
     message: 'Too many requests from this IP, please try again later.'
 });
 app.use(limiter);
 
-// -----------------------
 // Routes
-// -----------------------
 app.use('/api/v1', createRouter());
 
-// -----------------------
-// Start Server
-// -----------------------
-const port = Number(process.env.PORT ?? 3000);
+// Global Error Handler (should be last)
+app.use(errorHandler);
 
+// -----------------------
+// Server Startup
+// -----------------------
 async function startServer() {
     try {
+        // Connect to Prisma DB
         await prisma.$connect();
         console.log('✅ Prisma DB connected');
 
-        // 2️⃣ Connect Redis
-        await redis.ping(); // เรียก ping เพื่อเช็ค connection
+        // Connect to Redis
+        await redis.ping();
         console.log('✅ Redis connected');
 
-        app.listen(port, () => {
-            console.log(`🚀 Server running at http://localhost:${port}`);
+        // Start the server
+        app.listen(config.port, () => {
+            console.log(`🚀 Server running at http://localhost:${config.port}`);
+            console.log(`🌍 Environment: ${config.nodeEnv}`);
         });
     } catch (err) {
-        console.error('❌ DB not ready:', err);
+        console.error('❌ Failed to start server:', err);
         process.exit(1);
     }
 }

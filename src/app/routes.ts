@@ -1,41 +1,28 @@
 import { Router } from "express";
-import { mainContainer } from "./main-container";
-import { authMiddleware } from "../middleware/authMiddleware";
+import { createAuthRoutes } from "../modules/auth/routes/authRoutes";
+import { createUserRoutes } from "../modules/user/routes/userRoutes";
+import { createCustomerRoutes } from "../modules/customer/routes/customerRoutes";
+import { createTransactionRoutes } from "../modules/transactions/routes/transactionRoutes";
+import { createRewardRoutes } from "../modules/rewards/routes/rewardRoutes";
 
+export const createRouter = (): Router => {
+    const router = Router();
 
-export const createRouter = () => {
-    const r = Router();
+    // Health check endpoint
+    router.get('/health', (req, res) => {
+        res.status(200).json({ 
+            status: 'OK', 
+            timestamp: new Date().toISOString(),
+            uptime: process.uptime()
+        });
+    });
 
-    // Auth routes
-    const authCtrl = mainContainer.auth.controller();
-    r.post('/auth/login', (req, res) => authCtrl.login(req, res));
-    r.post('/auth/register', (req, res) => authCtrl.register(req, res));
+    // Mount route modules
+    router.use('/auth', createAuthRoutes());
+    router.use('/users', createUserRoutes());
+    router.use('/customers', createCustomerRoutes());
+    router.use('/transactions', createTransactionRoutes());
+    router.use('/rewards', createRewardRoutes());
 
-    // User routes
-    const userCtrl = mainContainer.user.controller();
-    r.post('/users', (req, res) => userCtrl.create(req, res));
-    r.get('/users/:id', (req, res) => userCtrl.get(req, res));
-
-    // Customer routes
-    const customerCtrl = mainContainer.customer.controller();
-    r.post('/customers', authMiddleware, (req, res) => customerCtrl.create(req, res));
-    r.get('/customers/:id', authMiddleware, (req, res) => customerCtrl.findById(req, res));
-    r.get('/customers', authMiddleware, (req, res) => customerCtrl.getAll(req, res));
-
-    // Transaction routes
-    const transactionCtrl = mainContainer.transaction.controller();
-    r.post('/transactions', authMiddleware, (req, res) => transactionCtrl.addPoint(req, res));
-    r.get('/transactions', authMiddleware, (req, res) => transactionCtrl.getAll(req, res));
-
-    // Loyalty routes
-    const loyaltyCtrl = mainContainer.loyalty.controller();
-
-    // Redemption routes
-    const redemptionCtrl = mainContainer.redemption.controller();
-
-    // Reward routes
-    const rewardCtrl = mainContainer.reward.controller();
-    r.post('/rewards/:id/redeem', authMiddleware, (req, res) => rewardCtrl.redeem(req, res));
-
-    return r;
+    return router;
 };
