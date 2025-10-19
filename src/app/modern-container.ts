@@ -1,47 +1,33 @@
 import { container } from '../shared/container/DIContainer';
 import { TYPES } from '../shared/container/types';
 import { setupContainer } from '../shared/container/setup';
+import { AuthController } from '../modules/auth/controllers/AuthController';
+import { CustomerController } from '../modules/customer/controllers/CustomerController';
+import { UserController } from '../modules/user/controllers/UserController';
+import { TransactionController } from '../modules/transactions/controllers/TransactionController';
+import { RewardController } from '../modules/rewards/controllers/RewardController';
+import { RedemptionController } from '../modules/redemptions/controllers/RedeemtionController';
 
 // Initialize the DI container
 setupContainer();
 
 export const modernContainer = {
   customer: {
-    controller: () => container.resolve(TYPES.CustomerController)
+    controller: () => container.resolve<CustomerController>(TYPES.CustomerController)
   },
   auth: {
-    controller: () => container.resolve(TYPES.AuthController)
+    controller: () => container.resolve<AuthController>(TYPES.AuthController)
   },
-  // Add other modules as they are converted
   user: {
-    controller: () => {
-      // Fallback to old container for now
-      const { userContainer } = require('../modules/user/container');
-      return userContainer.controller();
-    }
+    controller: () => container.resolve<UserController>(TYPES.UserController)
   },
   transaction: {
-    controller: () => {
-      const { transactionContainer } = require('../modules/transactions/container');
-      return transactionContainer.controller();
-    }
+    controller: () => container.resolve<TransactionController>(TYPES.TransactionController)
   },
   reward: {
-    controller: () => {
-      const { rewardContainer } = require('../modules/rewards/container');
-      return rewardContainer.controller();
-    }
+    controller: () => container.resolve<RewardController>(TYPES.RewardController)
   },
   redemption: {
-    controller: () => {
-      const { redemptionContainer } = require('../modules/redemptions/container');
-      return redemptionContainer.controller();
-    }
+    controller: () => container.resolve<RedemptionController>(TYPES.RedemptionController)
   },
-  loyalty: {
-    controller: () => {
-      const { loyaltyContainer } = require('../modules/loyalty/container');
-      return loyaltyContainer.controller();
-    }
-  }
 };

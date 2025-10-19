@@ -2,7 +2,7 @@ import { create } from "domain";
 import { prisma } from "../../../config/prisma";
 import { Redeemtion } from "../entities/Redeem";
 
-export class PgRedeemtionRepository {
+export class PgRedemptionRepository {
     async redeem(data: {customerId:string, rewardId:string}): Promise<Redeemtion> {
         const result = await prisma.redemption.create({
             data: {

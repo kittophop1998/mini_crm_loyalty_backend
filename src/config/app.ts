@@ -23,6 +23,8 @@ export interface AppConfig {
     };
     redis: {
         url: string;
+        port: number;
+        password?: string;
     };
 }
 
@@ -37,7 +39,7 @@ class ConfigLoader {
     }
 
     private static createConfig(): AppConfig {
-        const requiredEnvVars = ['DATABASE_URL', 'JWT_SECRET', 'REDIS_URL'];
+        const requiredEnvVars = ['DATABASE_URL', 'JWT_SECRET', 'REDIS_HOST'];
         const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
 
         if (missingVars.length > 0) {
@@ -63,7 +65,9 @@ class ConfigLoader {
                 url: process.env.DATABASE_URL!,
             },
             redis: {
-                url: process.env.REDIS_URL!,
+                url: process.env.REDIS_HOST!,
+                port: Number(process.env.REDIS_PORT) || 6379,
+                password: process.env.REDIS_PASSWORD || undefined,
             },
         };
     }

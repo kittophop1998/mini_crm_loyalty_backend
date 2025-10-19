@@ -1,4 +1,4 @@
-export class RedeemtionController {
+export class RedemptionController {
     constructor(
         private redeemtionUseCase: any
     ) {}

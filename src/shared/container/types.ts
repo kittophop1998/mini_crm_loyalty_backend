@@ -21,4 +21,5 @@ export const TYPES = {
   TransactionController: Symbol.for('TransactionController'),
   RewardController: Symbol.for('RewardController'),
   RedemptionController: Symbol.for('RedemptionController'),
+  LoyaltyController: Symbol.for('LoyaltyController'),
 } as const;

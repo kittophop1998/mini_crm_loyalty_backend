@@ -15,11 +15,17 @@ import { CreateUserUseCase } from '../../modules/user/usecases/CreateUserUseCase
 // Import controllers
 import { CustomerController } from '../../modules/customer/controllers/CustomerController';
 import { AuthController } from '../../modules/auth/controllers/AuthController';
+import { PgTransactionRepository } from '../../modules/transactions/infrastructure/PgTransactionRepository';
+import { PgRewardRepository } from '../../modules/rewards/infrastructure/PgRewardRepository';
+import { PgRedemptionRepository } from '../../modules/redemptions/infrastructure/PgRedemptionRepository';
 
 export function setupContainer(): void {
   // Register repositories as singletons
   container.registerSingleton(TYPES.CustomerRepository, () => new PgCustomerRepository());
   container.registerSingleton(TYPES.UserRepository, () => new PgUserRepository());
+  container.registerSingleton(TYPES.TransactionRepository, () => new PgTransactionRepository());
+  container.registerSingleton(TYPES.RewardRepository, () => new PgRewardRepository());
+  container.registerSingleton(TYPES.RedemptionRepository, () => new PgRedemptionRepository());
 
   // Register use cases as transients
   container.registerTransient(TYPES.CreateCustomerUseCase, () => 

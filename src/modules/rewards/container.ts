@@ -1,5 +1,5 @@
 import { PgCustomerRepository } from "../customer/infrastructure/PgCustomerRepository";
-import { PgRedeemtionRepository } from "../redemptions/infrastructure/PgRedeemtionRepository";
+import { PgRedemptionRepository } from "../redemptions/infrastructure/PgRedemptionRepository";
 import { RewardController } from "./controllers/RewardController";
 import { PgRewardRepository } from "./infrastructure/PgRewardRepository";
 import { RewardRedeemUseCase } from "./usecases/RedeemUseCase";
@@ -7,7 +7,7 @@ import { RewardRedeemUseCase } from "./usecases/RedeemUseCase";
 export const rewardContainer = {
     controller() {
         const rewardRepo = new PgRewardRepository();
-        const redeemtionRepo = new PgRedeemtionRepository();
+        const redeemtionRepo = new PgRedemptionRepository();
         const customerRepo = new PgCustomerRepository();
         const redeemUC = new RewardRedeemUseCase(rewardRepo, redeemtionRepo, customerRepo);
 
